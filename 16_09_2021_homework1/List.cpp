@@ -252,6 +252,7 @@ List& List::operator=(const List& l)
 {
 	if (&l != this)
 	{
+		del();
 		this->head = copy(l.head);
 	}
 	return *this;
