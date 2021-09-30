@@ -39,8 +39,6 @@ int main()
 	ll.print();
 	ll.del_last();
 	ll.print();
-	
-	*/
 
 	l.insertp(3, 99);
 	l.print();
@@ -52,6 +50,15 @@ int main()
 	l.print();
 	l.del_first();
 	l.print();
+	*/
+
+	DList ll;
+	ll = l;
+	ll.print();
+	ll.del();
+	ll.print();
+
+
 
 	return EXIT_SUCCESS;
 }

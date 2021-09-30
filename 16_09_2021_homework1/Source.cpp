@@ -24,6 +24,7 @@ int main()
 	l2.print();
 	List l3 = l2;
 	l3.print();
+	l2.print();
 	
 	List a;
 	for (int i = 0; i < 100; ++i)

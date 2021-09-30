@@ -2,6 +2,23 @@
 #include "DList.h"
 
 
+DList::DList(const DList& l)
+{
+	head = copy(l.head);
+	DNode* tmp;
+	tmp = head;
+	while (tmp->next != nullptr)
+	{
+		tmp = tmp->next;
+	}
+	tail = tmp;
+}
+
+DList::~DList()
+{
+	del();
+}
+
 bool DList::indexValid(int n)
 {
 	if (n >= 0 && n < length())
@@ -309,4 +326,52 @@ void DList::remove_if(bool(*f)(int))
 			++i;
 		}
 	}
+}
+
+void DList::del()
+{
+	if (head != nullptr)
+	{
+		while (head != nullptr)
+		{
+			DNode* tmp;
+			tmp = head;
+			head = head->next;
+			delete tmp;
+		}
+		head = nullptr;
+		tail = nullptr;
+	}
+}
+
+DNode* DList::copy(DNode* x)
+{
+	DNode* y = nullptr;
+	if (x != nullptr)
+	{
+		y = new DNode(x->data, copy(x->next));
+		if (y->next != nullptr)
+		{
+			y->next->prev = y;
+		}
+	}
+	return y;
+}
+
+DList& DList::operator=(const DList& l)
+{
+	
+	if (&l != this)
+	{
+		del();
+		head = copy(l.head);
+		DNode* tmp;
+		tmp = head;
+		while (tmp->next != nullptr)
+		{
+			tmp = tmp->next;
+		}
+		tail = tmp;
+	}
+	return *this;
 }

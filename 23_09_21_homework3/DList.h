@@ -18,6 +18,10 @@ public:
 
 	DList() { head = nullptr; tail = nullptr;}
 
+	DList(const DList& l);
+
+	~DList();
+
 private:
 	
 	bool indexValid(int n);
@@ -55,5 +59,10 @@ public:
 
 	void remove_if(bool(*f)(int));
 
+	void del();
+
+	DNode* copy(DNode* x);
+
+	DList& operator= (const DList& l);
 
 };
