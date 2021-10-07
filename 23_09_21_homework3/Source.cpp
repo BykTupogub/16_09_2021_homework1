@@ -50,7 +50,7 @@ int main()
 	l.print();
 	l.del_first();
 	l.print();
-	*/
+	
 
 	DList ll;
 	ll = l;
@@ -58,6 +58,10 @@ int main()
 	ll.del();
 	ll.print();
 
+	*/
+	l.add_after_first(99);
+	l.print();
+	l.reprint();
 
 
 	return EXIT_SUCCESS;
