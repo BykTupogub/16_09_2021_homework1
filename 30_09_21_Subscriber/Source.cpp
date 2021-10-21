@@ -76,7 +76,7 @@ void menu(int p, list<Subscriber> &l)
 	case 2:
 	{
 		string tel;
-		getline(cin, tel); // костыль очищающий буфер ввода cin
+		cin.get();
 		cout << "Telephone:" << endl;
 		getline(cin, tel);
 		del(tel, l);
@@ -85,7 +85,7 @@ void menu(int p, list<Subscriber> &l)
 	case 3:
 	{
 		string tel;
-		getline(cin, tel); // костыль очищающий буфер ввода cin
+		cin.get();
 		cout << "Telephone:" << endl;
 		getline(cin, tel);
 		print_tel(tel, l);
@@ -105,7 +105,7 @@ void add(list<Subscriber> &l)
 	string n;
 	string ad;
 	string t;
-	getline(cin, n); // костыль очищающий буфер ввода cin
+	cin.get();
 	cout << "Name:" << endl;
 	getline(cin, n);
 	cout << "Address:" << endl;
