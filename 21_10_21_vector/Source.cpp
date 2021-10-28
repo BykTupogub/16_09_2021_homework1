@@ -18,6 +18,41 @@ vector<T> concat(vector<T> a, vector<T> b);
 template <typename T>
 vector<T> repeat(int n, vector<T> a);
 
+template <typename T>
+auto second_occurrence(vector<T>& v, T a)
+{
+	{
+		auto i = find(v.begin(), v.end(), a);
+		i = find(++i, v.end(), a);
+		return i;
+	}
+}
+
+template<typename T>
+auto last_occurrence(vector<T>& v, T a)
+{
+	auto i = find(v.begin(), v.end(), a);
+	auto j = i;
+	while (i != v.end())
+	{
+		j = i;
+		i = find(++i, v.end(), a);
+	}
+	return j;
+}
+
+template<typename T> 
+bool subseq(vector<T> a, vector<T> b);
+
+/*
+template <typename T>
+auto last2(vector<T>& v , T a)
+{
+	return --upper_bound(v.begin(), v.end(), a);	
+}
+*/
+
+void ij(vector<double>& v, double x, double& i, double& j);
 
 int main()
 {
@@ -44,6 +79,42 @@ int main()
 
 	vector<int> v4 = repeat(5, v);
 	print(v4);
+	
+	
+	for (auto i = v4.begin(); i != second_occurrence(v4, 5); ++i)
+	{
+		cout << *i << " ";
+	}
+	cout << *second_occurrence(v4, 5);
+	cout << endl;
+
+	for (auto i = v4.begin(); i != last_occurrence(v4, 5); ++i)
+	{
+		cout << *i << " ";
+	}
+	cout << *last_occurrence(v4, 5);
+	cout << endl;
+
+	vector<int> v5{5, 5, 7, 3, 7, 7, 7};
+	if (subseq(v5, v4))
+	{
+		cout << "v5 in v4" << endl;
+	}
+	else
+	{
+		cout << "v5 not in v4" << endl;
+	}
+
+	/*
+	vector<int> v6{ 1, 2, 3, 4, 4, 4, 5, 6, 7 , 9};
+	for (auto i = v6.begin(); i != last2(v6, 5); ++i)
+	{
+		cout << *i << " ";
+	}
+	cout << *last2(v4, 5);
+	cout << endl;
+	*/
+	
 
 	return EXIT_SUCCESS;
 }
@@ -108,3 +179,26 @@ vector<T> repeat(int n, vector<T> a)
 	return v;
 }
 
+template<typename T>
+bool subseq(vector<T> a, vector<T> b)
+{
+	auto i = b.begin();
+	for (auto x : a)
+	{
+		i = find(i, b.end(), x);
+		if (i == b.end())
+		{
+			return false;
+		}
+		++i;
+	}
+	return true;
+}
+
+void ij(vector<double>& v, double x, double& i, double& j)
+{
+	vector<double>::iterator ii;
+	vector<double>::iterator jj;
+
+
+}
