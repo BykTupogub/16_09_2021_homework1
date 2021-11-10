@@ -1,4 +1,5 @@
 #include<iostream>
+#include<algorithm>
 #include<vector>
 
 using namespace std;
@@ -44,15 +45,15 @@ auto last_occurrence(vector<T>& v, T a)
 template<typename T> 
 bool subseq(vector<T> a, vector<T> b);
 
-/*
+
 template <typename T>
 auto last2(vector<T>& v , T a)
 {
-	return --upper_bound(v.begin(), v.end(), a);	
+	return upper_bound(v.begin(), v.end(), a) - 1;
 }
-*/
 
-void ij(vector<double>& v, double x, double& i, double& j);
+
+void ij(vector<double>& v, double x, int& i, int& j);
 
 int main()
 {
@@ -105,15 +106,22 @@ int main()
 		cout << "v5 not in v4" << endl;
 	}
 
-	/*
-	vector<int> v6{ 1, 2, 3, 4, 4, 4, 5, 6, 7 , 9};
+	// #9
+	vector<int> v6{ 1, 2, 3, 4, 4, 4, 5, 5, 5, 6, 7 , 9};
 	for (auto i = v6.begin(); i != last2(v6, 5); ++i)
 	{
 		cout << *i << " ";
 	}
 	cout << *last2(v4, 5);
 	cout << endl;
-	*/
+	// #10
+	vector<double> v7{ 1.8, 2.6, 3.4, 4.3, 4.3, 5.2, 6.6 };
+	int i = 0;
+	int j = 0;
+	ij(v7, 4.5, i, j);
+	print(v7);
+	cout << i << " " << j;
+	
 	
 
 	return EXIT_SUCCESS;
@@ -195,10 +203,29 @@ bool subseq(vector<T> a, vector<T> b)
 	return true;
 }
 
-void ij(vector<double>& v, double x, double& i, double& j)
+void ij(vector<double>& v, double x, int& i, int& j)
 {
 	vector<double>::iterator ii;
 	vector<double>::iterator jj;
+	ii = lower_bound(v.begin(), v.end(), x) - 1;
+	i = 0;
+	for (jj = v.begin(); jj != ii; ++jj)
+	{
+		++i;
+	}
+	j = i;
+	if (ii == v.end() || *ii == x)
+	{
+		return;
+	}
+	else
+	{
+		jj = upper_bound(v.begin(), v.end(), x);
+		for (ii; ii != jj; ++ii)
+		{
+			++j;
+		}
+	}
 
 
 }
