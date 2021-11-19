@@ -3,96 +3,6 @@
 
 using namespace std;
 
-void f_print(BNode* r, int indent)
-{
-	if (r == nullptr) return;
-	f_print(r->right, indent + 3);
-	for (int i = 0; i < indent; ++i)
-		cout << ' ';
-	cout << r->data << endl;
-	f_print(r->left, indent + 3);
-}
-
-
-BNode* f_preleftmost(BNode* r, BNode* p, int a, int& m)
-{
-	if (p->right != nullptr)
-	{
-		--a;
-		r = f_preleftmost(r, p->right, a, m);
-		++a;
-	}
-
-	if (p->left != nullptr)
-	{
-		++a;
-		if (m <= a)
-		{
-			m = a;
-			r = p;
-		}
-		r = f_preleftmost(r, p->left, a, m);
-		--a;
-	}
-	return r;
-}
-
-BNode* f_preleftleaf(BNode* r, BNode* p, int a, int& m)
-{
-	if (p->right != nullptr)
-	{
-		--a;
-		if (p->right->left == nullptr && p->right->right == nullptr && m <= a)
-		{
-			m = a;
-			r = p;
-		}
-		r = f_preleftleaf(r, p->right, a, m);
-		++a;
-	}
-
-	if (p->left != nullptr)
-	{
-		++a;
-		if (p->left->left == nullptr && p->left->right == nullptr && m <= a)
-		{
-			m = a;
-			r = p;
-		}
-		r = f_preleftleaf(r, p->left, a, m);
-		--a;
-	}
-	return r;
-}
-
-BNode* f_second_from_left_leaf(BNode* r, BNode* p, BNode* l, int a, int& m)
-{
-	if (p->right != nullptr)
-	{
-		--a;
-		if (p->right->left == nullptr && p->right->right == nullptr && m <= a && p->right != l)
-		{
-			m = a;
-			r = p->right;
-		}
-		r = f_second_from_left_leaf(r, p->right, l, a, m);
-		++a;
-	}
-
-	if (p->left != nullptr)
-	{
-		++a;
-		if (p->left->left == nullptr && p->left->right == nullptr && m <= a && p->left != l)
-		{
-			m = a;
-			r = p->left;
-		}
-		r = f_second_from_left_leaf(r, p->left, l, a, m);
-		--a;
-	}
-	return r;
-}
-
 void BTree::print()
 {
 	f_print(root);
@@ -135,8 +45,7 @@ BNode* BTree::leftleaf()
 	{
 		return preleftleaf()->right;
 	}
-}
-	
+}	
 
 BNode* BTree::preleftleaf()
 {
@@ -170,6 +79,359 @@ BNode* BTree::second_from_left_leaf()
 	BNode* p = root;
 	BNode* r = nullptr;
 	return f_second_from_left_leaf(r, p, leftleaf(), 0, m);
+}
+
+int BTree::count()
+{
+	return f_count(root);
+}
+
+void BTree::scale()
+{
+	f_scale(root);
+}
+
+int BTree::sum()
+{
+	return f_sum(root);
+}
+
+int BTree::count_neg()
+{
+	return f_count_neg(root);
+}
+
+int BTree::height()
+{
+	int m = -1;
+	if (root == nullptr)
+	{
+		return 0;
+	}
+	return f_height(root, 1, m);
+}
+
+void BTree::reflect()
+{
+	f_reflect(root);
+}
+
+int BTree::mult()
+{
+	return f_mult(root);
+}
+
+int BTree::eval()
+{
+	return f_eval(root);
+}
+
+////////////////////////////////
+
+void BTree::f_print(BNode* r, int indent)
+{
+	if (r == nullptr) return;
+	f_print(r->right, indent + 3);
+	for (int i = 0; i < indent; ++i)
+		cout << ' ';
+	cout << r->data << endl;
+	f_print(r->left, indent + 3);
+}
+
+BNode* BTree::f_preleftmost(BNode* r, BNode* p, int a, int& m)
+{
+	if (p->right != nullptr)
+	{
+		--a;
+		r = f_preleftmost(r, p->right, a, m);
+		++a;
+	}
+
+	if (p->left != nullptr)
+	{
+		++a;
+		if (m <= a)
+		{
+			m = a;
+			r = p;
+		}
+		r = f_preleftmost(r, p->left, a, m);
+		--a;
+	}
+	return r;
+}
+
+BNode* BTree::f_preleftleaf(BNode* r, BNode* p, int a, int& m)
+{
+	if (p->right != nullptr)
+	{
+		--a;
+		if (p->right->left == nullptr && p->right->right == nullptr && m <= a)
+		{
+			m = a;
+			r = p;
+		}
+		r = f_preleftleaf(r, p->right, a, m);
+		++a;
+	}
+
+	if (p->left != nullptr)
+	{
+		++a;
+		if (p->left->left == nullptr && p->left->right == nullptr && m <= a)
+		{
+			m = a;
+			r = p;
+		}
+		r = f_preleftleaf(r, p->left, a, m);
+		--a;
+	}
+	return r;
+}
+
+BNode* BTree::f_second_from_left_leaf(BNode* r, BNode* p, BNode* l, int a, int& m)
+{
+	if (p->right != nullptr)
+	{
+		--a;
+		if (p->right->left == nullptr && p->right->right == nullptr && m <= a && p->right != l)
+		{
+			m = a;
+			r = p->right;
+		}
+		r = f_second_from_left_leaf(r, p->right, l, a, m);
+		++a;
+	}
+
+	if (p->left != nullptr)
+	{
+		++a;
+		if (p->left->left == nullptr && p->left->right == nullptr && m <= a && p->left != l)
+		{
+			m = a;
+			r = p->left;
+		}
+		r = f_second_from_left_leaf(r, p->left, l, a, m);
+		--a;
+	}
+	return r;
+}
+
+int BTree::f_count(BNode* p)
+{
+	if (p == nullptr)
+	{
+		return 0;
+	}
+	return 1 + f_count(p->left) + f_count(p->right);
+}
+
+void BTree::f_scale(BNode* p)
+{
+	if (p == nullptr)
+	{
+		return;
+	}
+	p->data *= 3;
+	f_scale(p->left);
+	f_scale(p->right);
+}
+
+int BTree::f_sum(BNode* p)
+{
+	if (p == nullptr)
+	{
+		return 0;
+	}
+	return p->data + f_sum(p->left) + f_sum(p->right);
+}
+
+int BTree::f_count_neg(BNode* p)
+{
+	if (p == nullptr)
+	{
+		return 0;
+	}
+	if (p->data < 0)
+	{
+		return 1 + f_count_neg(p->left) + f_count_neg(p->right);
+	}
+	return f_count_neg(p->left) + f_count_neg(p->right);
+}
+ 
+int BTree::f_height(BNode* p, int h , int& m)
+{
+	if (p->left != nullptr)
+	{
+		++h;
+		f_height(p->left, h, m);
+		--h;
+	}
+	if (p->right != nullptr)
+	{
+		++h;
+		f_height(p->right, h, m);
+		--h;
+	}
+	if (m <= h)
+	{
+		m = h;
+	}
+	return m;
+}
+
+void BTree::f_reflect(BNode* p)
+{
+	if (p == nullptr)
+	{
+		return;
+	}
+	BNode* q = p->left;
+	p->left = p->right;
+	p->right = q;
+	f_reflect(p->left);
+	f_reflect(p->right);
+}
+
+int BTree::f_mult(BNode* p)
+{
+	if (p == nullptr)
+	{
+		return 1;
+	}
+	if (p->left != nullptr && p->right != nullptr)
+	{
+		return p->data * f_mult(p->right) * f_mult(p->left);
+	}
+	return f_mult(p->right) * f_mult(p->left);
+}
+
+int BTree::f_eval(BNode* p)
+{
+	if (p->left->left == nullptr && p->right->right == nullptr) 
+	{
+		switch (p->data)
+		{
+		case 1 :
+		{
+			return p->left->data + p->right->data;
+			break;
+		}
+		case 2:
+		{
+			return p->left->data - p->right->data;
+			break;
+		}
+		case 3:
+		{
+			return p->left->data * p->right->data;
+			break;
+		}
+		case 4:
+		{
+			return p->left->data / p->right->data;
+			break;
+		}
+		default:
+		{
+			break;
+		}
+		}
+	}
+	
+	if (p->left->left == nullptr && p->right->right != nullptr)
+	{
+		switch (p->data)
+		{
+		case 1:
+		{
+			return p->left->data + f_eval(p->right);
+			break;
+		}
+		case 2:
+		{
+			return p->left->data - f_eval(p->right);
+			break;
+		}
+		case 3:
+		{
+			return p->left->data * f_eval(p->right);
+			break;
+		}
+		case 4:
+		{
+			return p->left->data / f_eval(p->right);
+			break;
+		}
+		default:
+		{
+			break;
+		}
+		}
+	}
+
+	if (p->left->left != nullptr && p->right->right == nullptr)
+	{
+		switch (p->data)
+		{
+		case 1:
+		{
+			return f_eval(p->left) + p->right->data;
+			break;
+		}
+		case 2:
+		{
+			return f_eval(p->left) - p->right->data;
+			break;
+		}
+		case 3:
+		{
+			return f_eval(p->left) * p->right->data;
+			break;
+		}
+		case 4:
+		{
+			return f_eval(p->left) / p->right->data;
+			break;
+		}
+		default:
+		{
+			break;
+		}
+		}
+	}
+	
+	if (p->left->left != nullptr && p->right->right != nullptr)
+	{
+		switch (p->data)
+		{
+		case 1:
+		{
+			return f_eval(p->left) + f_eval(p->right);
+			break;
+		}
+		case 2:
+		{
+			return f_eval(p->left) - f_eval(p->right);
+			break;
+		}
+		case 3:
+		{
+			return f_eval(p->left) * f_eval(p->right);
+			break;
+		}
+		case 4:
+		{
+			return f_eval(p->left) / f_eval(p->right);
+			break;
+		}
+		default:
+		{
+			break;
+		}
+		}
+	}
+
 }
 
 
