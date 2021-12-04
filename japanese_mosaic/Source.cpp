@@ -9,8 +9,8 @@ int main()
 	ifstream fin("input.txt");
 	int n;
 	int m;
-	fin >> n;
 	fin >> m;
+	fin >> n;
 	cout << n << " " << m << endl;
 	int** arr;
 	arr = new int* [m];   
