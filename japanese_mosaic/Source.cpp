@@ -35,12 +35,16 @@ int main()
 
 	mosaic.solve();
 	
+	
+
+	
+	
+
+	
 	mosaic.print_free();
 	cout << endl << endl;
 	mosaic.print_color();
 	cout << endl << endl;
-	
-	
 
 	delete[] arr;
 	return EXIT_SUCCESS;

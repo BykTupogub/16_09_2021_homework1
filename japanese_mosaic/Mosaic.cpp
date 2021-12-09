@@ -406,6 +406,7 @@ bool Mosaic::horizontal2(int i, int j, int c)
 
 bool Mosaic::vertical2(int i, int j, int c)
 {
+	 
 	int k = 0;
 	if ((!index_correct(i - 1, j - 1) || mos[i - 1][j - 1].color == 1) &&
 		(!index_correct(i - 1, j) || mos[i - 1][j].color == 1) &&
@@ -415,6 +416,7 @@ bool Mosaic::vertical2(int i, int j, int c)
 	{
 		k = 1;
 	}
+	
 	if ((!index_correct(i + 1, j - 1) || mos[i + 1][j - 1].color == 1) &&
 		(!index_correct(i + 1, j) || mos[i + 1][j].color == 1) &&
 		(!index_correct(i + 1, j + 1) || mos[i + 1][j + 1].color == 1) &&
@@ -423,6 +425,7 @@ bool Mosaic::vertical2(int i, int j, int c)
 	{
 		k = -1;
 	}
+	
 	if (k != 0)
 	{
 		if (index_correct(i, j - 1))
@@ -491,11 +494,12 @@ bool Mosaic::second_case(int i, int j)
 	{
 		return horizontal2(i, j, 0);
 	}
+	
 	if (index_correct(i, j + 1) && mos[i][j].data - mos[i][j + 1].data == 2 && mos[i][j + 1].data != -1)
 	{
 		return vertical2(i, j, 1);
 	}
-	if (index_correct(i, j + 1) && mos[i][j].data - mos[i][j + 1].data == -2 && mos[i + 1][j + 1].data != -1)
+	if (index_correct(i, j + 1) && mos[i][j].data - mos[i][j + 1].data == -2 && mos[i][j + 1].data != -1)
 	{
 		return vertical2(i, j, 0);
 		
@@ -540,7 +544,7 @@ bool Mosaic::color2()
 		{
 			if (mos[i][j].data != -1 && !mos[i][j].all)
 			{
-				r = first_case(i, j) || second_case(i, j);
+				r = first_case(i, j) || second_case(i, j);	
 			}
 		}
 	}
