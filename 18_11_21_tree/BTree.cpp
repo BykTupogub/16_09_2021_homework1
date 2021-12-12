@@ -3,6 +3,11 @@
 
 using namespace std;
 
+BTree::~BTree()
+{
+	f_del(root);
+}
+
 void BTree::print()
 {
 	f_print(root);
@@ -126,7 +131,44 @@ int BTree::eval()
 	return f_eval(root);
 }
 
+void BTree::del0()
+{
+	f_del0(root);
+}
+
+void BTree::delLeaves()
+{
+	f_delLeaves(root);
+}
+
+void BTree::enlarge(int d)
+{
+	f_enlarge(root, d);
+}
+
+void BTree::del1()
+{
+	f_del1(root);
+}
+
+int BTree::sum_alt()
+{
+	return f_sum_alt(root->left, 0) + f_sum_alt(root->right, 0);
+}
+
 ////////////////////////////////
+
+void BTree::f_del(BNode*& p)
+{
+	if (p == nullptr)
+	{
+		return;
+	}
+	f_del(p->left);
+	f_del(p->right);
+	delete p;
+	p = nullptr;
+}
 
 void BTree::f_print(BNode* r, int indent)
 {
@@ -432,6 +474,99 @@ int BTree::f_eval(BNode* p)
 		}
 	}
 
+}
+
+void BTree::f_del0(BNode*& r)
+{
+	if (r == nullptr)
+	{
+		return;
+	}
+	if (r->data == 0)
+	{
+		f_del(r);  
+		return;
+	}
+	f_del0(r->left);
+	f_del0(r->right);
+}
+
+void BTree::f_delLeaves(BNode*& r)
+{
+	if (r == nullptr)
+	{
+		return;
+	}
+	if (r->left == nullptr && r->right == nullptr)
+	{
+		delete r;
+		r = nullptr;
+		return;
+	}
+	f_delLeaves(r->left);
+	f_delLeaves(r->right);
+}
+
+
+void BTree::f_enlarge(BNode* r, int d)
+{
+	
+	if (r->left == nullptr)
+	{
+		r->left = new BNode(d);
+	}
+	else
+	{
+		f_enlarge(r->left, d);
+	}
+	if (r->right == nullptr)
+	{
+		r->right = new BNode(d);
+	}
+	else
+	{
+		f_enlarge(r->right, d);
+	}
+	
+}
+
+void BTree::f_del1(BNode*& r)
+{
+	if (r == nullptr)
+	{
+		return;
+	}
+	BNode* p;
+	if (r->left != nullptr && r->left->data == 1) 
+	{
+		f_del(r->left->left);
+		p = r->left->right;
+		delete r->left;
+		r->left = p;
+	}
+	if (r->right != nullptr && r->right->data == 1)
+	{
+		f_del(r->right->left);
+		p = r->right->right;
+		delete r->right;
+		r->right = p;
+	}
+	f_del1(r->left);
+	f_del1(r->right);
+
+}
+
+int BTree::f_sum_alt(BNode* r, int s)
+{
+	if (r == nullptr)
+	{
+		return s;
+	}
+	if (r->left != nullptr && r->right != nullptr && r->left->data < 0 && r->right->data >= 0)
+	{
+		s += r->left->data + r->right->data;
+	}
+	return f_sum_alt(r->left, s) + f_sum_alt(r->right, s) - s;
 }
 
 

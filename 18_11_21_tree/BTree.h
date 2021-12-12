@@ -17,6 +17,8 @@ public:
 	BTree(BNode* p) :
 		root(p) {}
 
+	~BTree();
+
 	void print();
 
 	BNode* leftmost();
@@ -54,9 +56,21 @@ public:
 	template<class T>
 	BNode* find(T d);
 
+	void del0();
+
+	void delLeaves();
+
+	void enlarge(int d);
+
+	void del1();
+
+	int sum_alt();
+
 private:
 
 	BNode* root;
+
+	static void f_del(BNode*& p);
 
 	static void f_print(BNode* r, int indent = 0);
 
@@ -84,6 +98,16 @@ private:
 
 	template<class T>
 	static BNode* f_find(BNode* p, T d);
+
+	static void f_del0(BNode*& r);
+
+	static void f_delLeaves(BNode*& r);
+
+	static void f_enlarge(BNode* r, int d);
+
+	static void f_del1(BNode*& r);
+
+	static int f_sum_alt(BNode* r, int s);
 };
 
 /////////////////////////

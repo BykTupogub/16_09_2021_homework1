@@ -73,6 +73,49 @@ int main()
 	tree2.print();
 	cout << "eval: " << tree2.eval() << endl;
 
+	cout << "Рассмотрим дерево:" << endl;
+
+	BNode* s11 = new BNode(0);
+	BNode* s10 = new BNode(6);
+	BNode* s9 = new BNode(1);
+	BNode* s8 = new BNode(1);
+	BNode* s7 = new BNode(5, s11, s10); 
+	BNode* s6 = new BNode(0, s9, s8);
+	BNode* s5 = new BNode(4);
+	BNode* s4 = new BNode(3);
+	BNode* s3 = new BNode(1, s7, s6); 
+	BNode* s2 = new BNode(5, s5, s4);
+	BNode* s1 = new BNode(3, s3, s2); 
+	BTree tree3(s1);
+	tree3.print();
+	cout << "Удалим все узлы и их поддеревья содержащие 0" << endl;
+	tree3.del0();
+	tree3.print();
+	cout << "Удалим все листья" << endl;
+	tree3.delLeaves();
+	tree3.print();
+	cout << "Заменим все указатели нулями" << endl;
+	tree3.enlarge(0);
+	tree3.print();
+	cout << "Удалим узлы с единицей и их левые поддеревья" << endl;
+	tree3.del1();
+	tree3.print();
+	cout << "Рассмотрим дерево:" << endl;
+	BNode* k11 = new BNode(-2);
+	BNode* k10 = new BNode(6);
+	BNode* k9 = new BNode(-1);
+	BNode* k8 = new BNode(2);
+	BNode* k7 = new BNode(-3, k11, k10);
+	BNode* k6 = new BNode(0, k9, k8);
+	BNode* k5 = new BNode(4);
+	BNode* k4 = new BNode(3);
+	BNode* k3 = new BNode(1, k7, k6);
+	BNode* k2 = new BNode(5, k5, k4);
+	BNode* k1 = new BNode(3, k3, k2);
+	BTree tree4(k1);
+	tree4.print();
+	cout << "sum_alt: " << tree4.sum_alt() << endl;
+
 
 	return EXIT_SUCCESS;
 }
