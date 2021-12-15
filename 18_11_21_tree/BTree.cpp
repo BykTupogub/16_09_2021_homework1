@@ -156,6 +156,26 @@ int BTree::sum_alt()
 	return f_sum_alt(root->left, 0) + f_sum_alt(root->right, 0);
 }
 
+BNode* BTree::find_rec(int d)
+{
+	return f_find_rec(root, d);
+}
+
+BNode* BTree::find_cycle(int d)
+{
+	return f_find_cycle(root, d);
+}
+
+void BTree::insert_rec(int d)
+{
+	f_insert_rec(root, d);
+}
+
+void BTree::insert_cycle(int d)
+{
+	f_insert_cycle(root, d);
+}
+
 ////////////////////////////////
 
 void BTree::f_del(BNode*& p)
@@ -473,7 +493,7 @@ int BTree::f_eval(BNode* p)
 		}
 		}
 	}
-
+	return 0;
 }
 
 void BTree::f_del0(BNode*& r)
@@ -506,7 +526,6 @@ void BTree::f_delLeaves(BNode*& r)
 	f_delLeaves(r->left);
 	f_delLeaves(r->right);
 }
-
 
 void BTree::f_enlarge(BNode* r, int d)
 {
@@ -569,4 +588,131 @@ int BTree::f_sum_alt(BNode* r, int s)
 	return f_sum_alt(r->left, s) + f_sum_alt(r->right, s) - s;
 }
 
+BNode* BTree::f_find_rec(BNode* p, int d)
+{
+	if (p == nullptr)
+	{
+		return nullptr;
+	}
+	if (p->data == d)
+	{
+		return p;
+	}
+	if (d > p->data)
+	{
+		return f_find_rec(p->right, d);
+	}
+	if (d < p->data)
+	{
+		return f_find_rec(p->left, d);
+	}
 
+}
+
+BNode* BTree::f_find_cycle(BNode* p, int d)
+{
+	if (p == nullptr)
+	{
+		return nullptr;
+	}
+	while (p != nullptr)
+	{
+		if (d == p->data)
+		{
+			return p;
+		}
+		if (d < p->data)
+		{
+			p = p->left;
+		}
+		else if (d > p->data)
+		{
+			p = p->right;
+		}
+	}
+	return nullptr;
+}
+
+void BTree::f_insert_rec(BNode*& p, int d)
+{
+	if (p == nullptr)
+	{
+		p = new BNode(d);
+		return;
+	}
+	if (p->data == d)
+	{
+		cout << "Ошибка: элемент " << d << " уже существует" << endl;
+		return;
+	}
+	if (d > p->data)
+	{
+		if(p->right != nullptr)
+		{
+			f_insert_rec(p->right, d);
+		}
+		else
+		{
+			p->right = new BNode(d);
+			return;
+		}
+	}
+	if (d < p->data)
+	{
+		if (p->left != nullptr)
+		{
+			f_insert_rec(p->left, d);
+		}
+		else
+		{
+			p->left = new BNode(d);
+			return;
+		}
+	}
+	return;
+}
+
+void BTree::f_insert_cycle(BNode*& p, int d)
+{
+	if (p == nullptr)
+	{
+		p = new BNode(d);
+		return;
+	}
+	BNode* t;
+	t = p;
+	while (t != nullptr)
+	{
+		if (d == t->data)
+		{
+			cout << "Ошибка: элемент "<< d << " уже существует" << endl;
+			return;
+		}
+		if (d < t->data)
+		{
+			if (t->left != nullptr)
+			{
+				t = t->left;
+			}
+			else
+			{
+				t->left = new BNode(d);
+				return;
+			}
+			
+		}
+		else if (d > t->data)
+		{
+			if (t->right != nullptr)
+			{
+				t = t->right;
+			}
+			else
+			{
+				t->right = new BNode(d);
+				return;
+			}
+		}
+	}
+	return;
+}

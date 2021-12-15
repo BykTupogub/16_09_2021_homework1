@@ -66,6 +66,14 @@ public:
 
 	int sum_alt();
 
+	BNode* find_rec(int d);
+
+	BNode* find_cycle(int d);
+
+	void insert_rec(int d);
+
+	void insert_cycle(int d);
+
 private:
 
 	BNode* root;
@@ -108,6 +116,14 @@ private:
 	static void f_del1(BNode*& r);
 
 	static int f_sum_alt(BNode* r, int s);
+
+	static BNode* f_find_rec(BNode* p, int d);
+
+	static BNode* f_find_cycle(BNode* p, int d);
+
+	static void f_insert_rec(BNode*& p, int d);
+	
+	static void f_insert_cycle(BNode*& p, int d);
 };
 
 /////////////////////////
@@ -125,3 +141,10 @@ inline BNode* BTree::f_find(BNode* p, T d)
 	return nullptr;
 	
 }
+
+
+
+
+
+
+

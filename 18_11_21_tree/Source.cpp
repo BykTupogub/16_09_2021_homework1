@@ -116,6 +116,31 @@ int main()
 	tree4.print();
 	cout << "sum_alt: " << tree4.sum_alt() << endl;
 
+	cout << "Построим дерево двоичного поиска:" << endl;
+	BNode* t15 = new BNode(15);
+	BNode* t14 = new BNode(49);
+	BNode* t13 = new BNode(76);
+	BNode* t12 = new BNode(93);
+	BNode* t11 = new BNode(101);
+	BNode* t10 = new BNode(110);
+	BNode* t9 = new BNode(121);
+	BNode* t8 = new BNode(175);
+	BNode* t7 = new BNode(37, t15, t14);
+	BNode* t6 = new BNode(85, t13, t12);
+	BNode* t5 = new BNode(107, t11, t10);
+	BNode* t4 = new BNode(150, t9, t8);
+	BNode* t3 = new BNode(70, t7, t6);
+	BNode* t2 = new BNode(113, t5, t4);
+	BNode* t1 = new BNode(100, t3, t2);
+	BTree tree5(t1);
+	tree5.print();
+
+	cout << "найдём элемент 101 с помощью рекурсивной функции: " << tree5.find_rec(101)->data << " - " << tree5.find_rec(101) << endl;
+	cout << "найдём элемент 101 с помощью функции с циклом: " << tree5.find_cycle(101)->data << " - " << tree5.find_cycle(101) << endl;
+	cout << "Вставим элемент 48 и элемент 72 с помощью рекурсивной функции и функции с циклом" << endl;
+	tree5.insert_rec(48);
+	tree5.insert_cycle(71);
+	tree5.print();
 
 	return EXIT_SUCCESS;
 }
