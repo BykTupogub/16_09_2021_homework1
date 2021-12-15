@@ -176,7 +176,7 @@ void BTree::insert_cycle(int d)
 	f_insert_cycle(root, d);
 }
 
-////////////////////////////////
+//////////////////////////////////////////////////
 
 void BTree::f_del(BNode*& p)
 {
