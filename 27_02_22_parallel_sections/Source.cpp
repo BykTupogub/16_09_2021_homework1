@@ -3,7 +3,7 @@
 #include <omp.h>
 #include <cmath>
 #include<iomanip>
-#include"Point.h"
+//#include"Point.h"
 
 #define N 100000000
 double PI = 3.14159265;
