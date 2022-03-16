@@ -277,6 +277,7 @@ int prime_numbers_4(int n)
 	return 0;
 }
 
+/*
 void filling_p(int n)
 {
 	for (int i = 0; i < n; ++i)
@@ -303,7 +304,7 @@ double diameter_line(int n)
 	}
 	return max;
 }
-
+*/
 double diameter_2(int n)
 {
 	return 0.0;
