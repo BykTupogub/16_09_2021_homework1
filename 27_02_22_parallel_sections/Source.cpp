@@ -8,7 +8,7 @@
 #define N 100000000
 double PI = 3.14159265;
 double x[100000000];
-Point p[10000];
+//Point p[10000];
 
 
 void calculate_sin(int n);
