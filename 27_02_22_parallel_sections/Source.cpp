@@ -3,12 +3,12 @@
 #include <omp.h>
 #include <cmath>
 #include<iomanip>
-//#include"Point.h"
+#include"Point.h"
 
 #define N 100000000
 double PI = 3.14159265;
 double x[100000000];
-//Point p[10000];
+Point p[10000];
 
 
 void calculate_sin(int n);
@@ -38,11 +38,12 @@ using namespace std;
 int main()
 {
 	srand(time(0));
+
 	//calculate_sin(100000000);
 
-	calulate_pi(100000000);
+	//calulate_pi(100000000);
 
-	
+	/*
 	double t = omp_get_wtime();
 	cout << "prime numbers: " << prime_numbers_line(10000000) << endl;
 	cout  << setprecision(6)  << "Time line: " << omp_get_wtime() - t << endl;
@@ -50,14 +51,26 @@ int main()
 	t = omp_get_wtime();
 	cout << "prime numbers: " << prime_numbers_2(10000000) << endl;
 	cout << "Time 2: " << omp_get_wtime() - t << endl;
+	*/
 	
-	/*
 	filling_p(10000);
 
 	double t = omp_get_wtime();
 	cout << "diameter :" << diameter_line(10000) << endl;
 	cout << setprecision(6) << "Time line: " << omp_get_wtime() - t << endl;
-	*/
+
+	t = omp_get_wtime();
+	cout << "diameter :" << diameter_2(10000) << endl;
+	cout << setprecision(6) << "Time 2: " << omp_get_wtime() - t << endl;
+
+	t = omp_get_wtime();
+	cout << "diameter :" << diameter_3(10000) << endl;
+	cout << setprecision(6) << "Time 3: " << omp_get_wtime() - t << endl;
+
+	t = omp_get_wtime();
+	cout << "diameter :" << diameter_4(10000) << endl;
+	cout << setprecision(6) << "Time 4: " << omp_get_wtime() - t << endl;
+	
 	
 
 
@@ -277,7 +290,7 @@ int prime_numbers_4(int n)
 	return 0;
 }
 
-/*
+
 void filling_p(int n)
 {
 	for (int i = 0; i < n; ++i)
@@ -293,7 +306,7 @@ double diameter_line(int n)
 	double d = 0;
 	for (int i = 0; i < n - 1; ++i)
 	{
-		for (int j = i; j < n; ++j)
+	 	for (int j = i; j < n; ++j)
 		{
 			d = p[i].dist(p[j]);
 			if (max < d)
@@ -304,18 +317,181 @@ double diameter_line(int n)
 	}
 	return max;
 }
-*/
+
 double diameter_2(int n)
 {
-	return 0.0;
+	double max1 = 0;
+	double max2 = 0;
+	double d1 = 0;
+	double d2 = 0;
+	int c = n - sqrt(2) * n / 2;
+#pragma omp parallel sections
+	{
+#pragma omp section
+		{
+			for (int i = 0; i < c; ++i)
+			{
+				for (int j = i; j < n; ++j)
+				{
+					d1 = p[i].dist(p[j]);
+					if (max1 < d1)
+					{
+						max1 = d1;
+					}
+				}
+			}
+		}
+#pragma omp section
+		{
+			for (int i = c; i < n - 1; ++i)
+			{
+				for (int j = i; j < n; ++j)
+				{
+					d2 = p[i].dist(p[j]);
+					if (max2 < d2)
+					{
+						max2 = d2;
+					}
+				}
+			}
+		}
+	}
+	return (max1 > max2) ? max1 : max2;
 }
 
 double diameter_3(int n)
 {
-	return 0.0;
+	double max1 = 0;
+	double max2 = 0;
+	double max3 = 0;
+	double d1 = 0;
+	double d2 = 0;
+	double d3 = 0;
+	int b = n - n/sqrt(3);
+	int a = b - sqrt(2) * b / 2;
+	
+#pragma omp parallel sections
+	{
+#pragma omp section
+		{
+			for (int i = 0; i < a; ++i)
+			{
+				for (int j = i; j < n; ++j)
+				{
+					d1 = p[i].dist(p[j]);
+					if (max1 < d1)
+					{
+						max1 = d1;
+					}
+				}
+			}
+		}
+#pragma omp section
+		{
+			for (int i = a; i < b; ++i)
+			{
+				for (int j = i; j < n; ++j)
+				{
+					d2 = p[i].dist(p[j]);
+					if (max2 < d2)
+					{
+						max2 = d2;
+					}
+				}
+			}
+		}
+#pragma omp section
+		{
+			for (int i = b; i < n - 1; ++i)
+			{
+				for (int j = i; j < n; ++j)
+				{
+					d3 = p[i].dist(p[j]);
+					if (max3 < d3)
+					{
+						max3 = d3;
+					}
+				}
+			}
+		}
+	}
+	max1 =  (max1 > max2) ? max1 : max2;
+	return (max1 > max3) ? max1 : max3;
 }
 
 double diameter_4(int n)
 {
-	return 0.0;
+	double max1 = 0;
+	double max2 = 0;
+	double max3 = 0;
+	double max4 = 0;
+	double d1 = 0;
+	double d2 = 0;
+	double d3 = 0;
+	double d4 = 0;
+	int c2 = n - sqrt(2) * n / 2;
+	int c1 = c2 - sqrt(2) * c2 / 2;
+	int c3 = 2*c2 - sqrt(2) * c2 / 2;
+#pragma omp parallel sections
+	{
+#pragma omp section
+		{
+			for (int i = 0; i < c1; ++i)
+			{
+				for (int j = i; j < n; ++j)
+				{
+					d1 = p[i].dist(p[j]);
+					if (max1 < d1)
+					{
+						max1 = d1;
+					}
+				}
+			}
+		}
+#pragma omp section
+		{
+			for (int i = c1; i < c2; ++i)
+			{
+				for (int j = i; j < n; ++j)
+				{
+					d2 = p[i].dist(p[j]);
+					if (max2 < d2)
+					{
+						max2 = d2;
+					}
+				}
+			}
+		}
+#pragma omp section
+		{
+			for (int i = c2; i < c3; ++i)
+			{
+				for (int j = i; j < n; ++j)
+				{
+					d3 = p[i].dist(p[j]);
+					if (max3 < d3)
+					{
+						max3 = d3;
+					}
+				}
+			}
+		}
+#pragma omp section
+		{
+			for (int i = c3; i < n - 1; ++i)
+			{
+				for (int j = i; j < n; ++j)
+				{
+					d4 = p[i].dist(p[j]);
+					if (max4 < d4)
+					{
+						max4 = d4;
+					}
+				}
+			}
+		}
+	}
+	max1 =  (max1 > max2) ? max1 : max2;
+	max1 = (max1 > max3) ? max1 : max3;
+	return (max1 > max4) ? max1 : max4;
 }
