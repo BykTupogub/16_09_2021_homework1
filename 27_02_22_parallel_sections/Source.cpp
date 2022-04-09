@@ -13,7 +13,11 @@ Point p[10000];
 
 void calculate_sin(int n);
 
+void calculate_sin_pf(int n);
+
 void calulate_pi(int n);
+
+void calulate_pi_pf(int n);
 
 bool prime(int a);
 
@@ -21,8 +25,7 @@ int prime_numbers_line(int n); // n >=3
 
 int prime_numbers_2(int n);
 
-int prime_numbers_4(int n);
-
+void prime_numbers_pf(int n);
 
 void filling_p(int n);
 
@@ -33,6 +36,8 @@ double diameter_2(int n);
 double diameter_3(int n);
 
 double diameter_4(int n);
+
+void diameter_pf(int n);
 
 using namespace std;
 int main()
@@ -53,6 +58,8 @@ int main()
 	cout << "Time 2: " << omp_get_wtime() - t << endl;
 	*/
 	
+
+	/*
 	filling_p(10000);
 
 	double t = omp_get_wtime();
@@ -70,9 +77,17 @@ int main()
 	t = omp_get_wtime();
 	cout << "diameter :" << diameter_4(10000) << endl;
 	cout << setprecision(6) << "Time 4: " << omp_get_wtime() - t << endl;
-	
+	*/
 	
 
+
+	//calculate_sin_pf(100000000);
+
+	//calulate_pi_pf(100000000);
+
+	//prime_numbers_pf(10000000);
+
+	diameter_pf(10000);
 
 	return EXIT_SUCCESS;
 }
@@ -140,6 +155,43 @@ void calculate_sin(int n)
 		}
 	}
 	cout << "Time 4: " << omp_get_wtime() - t << endl;
+
+}
+
+void calculate_sin_pf(int n)
+{
+	double t = omp_get_wtime();
+	for (int i = 0; i < n; ++i)
+	{
+		x[i] = sin(PI * i / (2.0 * n));
+
+	}
+	cout << "Time line: " << omp_get_wtime() - t << endl;
+	////////////////////////////////////////////
+	t = omp_get_wtime();
+#pragma omp parallel for schedule (static)
+	for(int i = 0; i < n; ++i)
+	{
+		x[i] = sin(PI * i / (2.0 * n));
+
+	}
+	cout << "Time static: " << omp_get_wtime() - t << endl;
+	////////////////////////////////////////////
+	t = omp_get_wtime();
+#pragma omp parallel for schedule (dynamic, 1000)
+	for (int i = 0; i < n; ++i)
+	{
+		x[i] = sin(PI * i / (2.0 * n));
+	}
+	cout << "Time dynamic: " << omp_get_wtime() - t << endl;
+	////////////////////////////////////////////
+	t = omp_get_wtime();
+#pragma omp parallel for schedule (guided, 1000)
+	for (int i = 0; i < n; ++i)
+	{
+		x[i] = sin(PI * i / (2.0 * n));
+	}
+	cout << "Time guided: " << omp_get_wtime() - t << endl;
 
 }
 
@@ -224,6 +276,54 @@ void calulate_pi(int n)
 	cout << setprecision(15) << "pi = " << pi << endl;
 }
 
+void calulate_pi_pf(int n)
+{
+
+	long double pi = 0;
+	double t = omp_get_wtime();
+	for (int i = 0; i < n; ++i)
+	{
+		pi += (1.0 / (1.0 + ((2.0 * i - 1) / (2.0 * n)) * ((2.0 * i - 1) / (2.0 * n))));
+	}
+	pi = pi * 4 / N;
+	cout << "Time line: " << omp_get_wtime() - t << endl;
+	cout << setprecision(15) << "pi = " << pi << endl;
+	//////////////////////////////////////////
+	pi = 0;
+	t = omp_get_wtime();
+#pragma omp parallel for schedule(static) reduction (+: pi)
+	for (int i = 0; i < n; ++i)
+	{
+		pi += (1.0 / (1.0 + ((2.0 * i - 1) / (2.0 * n)) * ((2.0 * i - 1) / (2.0 * n))));
+	}
+	pi = pi * 4 / N;
+	cout << setprecision(6) << "Time static: " << omp_get_wtime() - t << endl;
+	cout << setprecision(15) << "pi = " << pi << endl;
+	//////////////////////////////////////////
+	pi = 0;
+	t = omp_get_wtime();
+#pragma omp parallel for schedule(dynamic, 1000) reduction (+: pi)
+	for (int i = 0; i < n; ++i)
+	{
+		pi += (1.0 / (1.0 + ((2.0 * i - 1) / (2.0 * n)) * ((2.0 * i - 1) / (2.0 * n))));
+	}
+	pi = pi * 4 / N;
+	cout << setprecision(6) << "Time dynamic: " << omp_get_wtime() - t << endl;
+	cout << setprecision(15) << "pi = " << pi << endl;
+	//////////////////////////////////////////
+	pi = 0;
+	t = omp_get_wtime();
+#pragma omp parallel for schedule(guided, 1000) reduction (+: pi)
+	for (int i = 0; i < n; ++i)
+	{
+		pi += (1.0 / (1.0 + ((2.0 * i - 1) / (2.0 * n)) * ((2.0 * i - 1) / (2.0 * n))));
+	}
+	pi = pi * 4 / N;
+	cout << setprecision(6) << "Time guided: " << omp_get_wtime() - t << endl;
+	cout << setprecision(15) << "pi = " << pi << endl;
+
+}
+
 bool prime(int a)
 {
 	if (a == 1) return false;
@@ -285,11 +385,60 @@ int prime_numbers_2(int n)
 	return p;
 }
 
-int prime_numbers_4(int n)
+void prime_numbers_pf(int n)
 {
-	return 0;
-}
+	int p = 0;
+	double t = omp_get_wtime();
+	for (int i = 3; i <= n; i += 2)
+	{
+		if (prime(i))
+		{
+			++p;
+		}
+	}
+	cout << "prime numbers: " << p << endl;
+	cout << setprecision(6) << "Time line: " << omp_get_wtime() - t << endl;
+	///////////////////////////////////////////////
+	p = 0;
+	t = omp_get_wtime();
+#pragma omp parallel for schedule(static) reduction (+: p)
+	for (int i = 3; i <= n; i += 2)
+	{
+		if (prime(i))
+		{
+			++p;
+		}
+	}
+	cout << "prime numbers: " << p << endl;
+	cout << setprecision(6) << "Time static: " << omp_get_wtime() - t << endl;
+	///////////////////////////////////////////////
+	p = 0;
+	t = omp_get_wtime();
+#pragma omp parallel for schedule(dynamic, 1000) reduction (+: p)
+	for (int i = 3; i <= n; i += 2)
+	{
+		if (prime(i))
+		{
+			++p;
+		}
+	}
+	cout << "prime numbers: " << p << endl;
+	cout << setprecision(6) << "Time dynamic: " << omp_get_wtime() - t << endl;
+	///////////////////////////////////////////////
+	p = 0;
+	t = omp_get_wtime();
+#pragma omp parallel for schedule(guided, 1000) reduction (+: p)
+	for (int i = 3; i <= n; i += 2)
+	{
+		if (prime(i))
+		{
+			++p;
+		}
+	}
+	cout << "prime numbers: " << p << endl;
+	cout << setprecision(6) << "Time guided: " << omp_get_wtime() - t << endl;
 
+}
 
 void filling_p(int n)
 {
@@ -494,4 +643,80 @@ double diameter_4(int n)
 	max1 =  (max1 > max2) ? max1 : max2;
 	max1 = (max1 > max3) ? max1 : max3;
 	return (max1 > max4) ? max1 : max4;
+}
+
+void diameter_pf(int n)
+{
+
+	filling_p(10000);
+	double max = 0;
+	double d = 0;
+	double t = omp_get_wtime();
+	for (int i = 0; i < n - 1; ++i)
+	{
+		for (int j = i; j < n; ++j)
+		{
+			d = p[i].dist(p[j]);
+			if (max < d)
+			{
+				max = d;
+			}
+		}
+	}
+	cout << "diameter :" << max << endl;
+	cout << setprecision(6) << "Time line: " << omp_get_wtime() - t << endl;
+	/////////////////////////////////////////////////////////
+	max = 0;
+	d = 0;
+	t = omp_get_wtime();
+#pragma omp parallel for schedule(static) reduction (max: max)
+	for (int i = 0; i < n - 1; ++i)
+	{
+		for (int j = i; j < n; ++j)
+		{
+			d = p[i].dist(p[j]);
+			if (max < d)
+			{
+				max = d;
+			}
+		}
+	}
+	cout << "diameter :" << max << endl;
+	cout << setprecision(6) << "Time static: " << omp_get_wtime() - t << endl;
+	/////////////////////////////////////////////////////////
+	max = 0;
+	d = 0;
+	t = omp_get_wtime();
+#pragma omp parallel for schedule(dynamic, 1000) reduction (max: max)
+	for (int i = 0; i < n - 1; ++i)
+	{
+		for (int j = i; j < n; ++j)
+		{
+			d = p[i].dist(p[j]);
+			if (max < d)
+			{
+				max = d;
+			}
+		}
+	}
+	cout << "diameter :" << max << endl;
+	cout << setprecision(6) << "Time dynamic: " << omp_get_wtime() - t << endl;
+	/////////////////////////////////////////////////////////
+	max = 0;
+	d = 0;
+	t = omp_get_wtime();
+#pragma omp parallel for schedule(guided, 1000) reduction (max: max)
+	for (int i = 0; i < n - 1; ++i)
+	{
+		for (int j = i; j < n; ++j)
+		{
+			d = p[i].dist(p[j]);
+			if (max < d)
+			{
+				max = d;
+			}
+		}
+	}
+	cout << "diameter :" << max << endl;
+	cout << setprecision(6) << "Time guided: " << omp_get_wtime() - t << endl;
 }
