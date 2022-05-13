@@ -5,11 +5,12 @@
 #include<iomanip>
 #include"Point.h"
 
+using namespace std;
+
 #define N 100000000
 double PI = 3.14159265;
 double x[100000000];
 Point p[10000];
-
 
 void calculate_sin(int n);
 
@@ -39,7 +40,6 @@ double diameter_4(int n);
 
 void diameter_pf(int n);
 
-using namespace std;
 int main()
 {
 	srand(time(0));
@@ -85,9 +85,9 @@ int main()
 
 	//calulate_pi_pf(100000000);
 
-	//prime_numbers_pf(10000000);
+	prime_numbers_pf(10'000'000);
 
-	diameter_pf(10000);
+	//diameter_pf(10000);
 
 	return EXIT_SUCCESS;
 }
@@ -285,10 +285,11 @@ void calulate_pi_pf(int n)
 	{
 		pi += (1.0 / (1.0 + ((2.0 * i - 1) / (2.0 * n)) * ((2.0 * i - 1) / (2.0 * n))));
 	}
-	pi = pi * 4 / N;
+	pi = pi * 4 / n;
 	cout << "Time line: " << omp_get_wtime() - t << endl;
 	cout << setprecision(15) << "pi = " << pi << endl;
 	//////////////////////////////////////////
+	
 	pi = 0;
 	t = omp_get_wtime();
 #pragma omp parallel for schedule(static) reduction (+: pi)
@@ -296,7 +297,7 @@ void calulate_pi_pf(int n)
 	{
 		pi += (1.0 / (1.0 + ((2.0 * i - 1) / (2.0 * n)) * ((2.0 * i - 1) / (2.0 * n))));
 	}
-	pi = pi * 4 / N;
+	pi = pi * 4 / n;
 	cout << setprecision(6) << "Time static: " << omp_get_wtime() - t << endl;
 	cout << setprecision(15) << "pi = " << pi << endl;
 	//////////////////////////////////////////
@@ -401,7 +402,7 @@ void prime_numbers_pf(int n)
 	///////////////////////////////////////////////
 	p = 0;
 	t = omp_get_wtime();
-#pragma omp parallel for schedule(static) reduction (+: p)
+#pragma omp parallel for schedule(static, 1000) reduction (+: p)
 	for (int i = 3; i <= n; i += 2)
 	{
 		if (prime(i))

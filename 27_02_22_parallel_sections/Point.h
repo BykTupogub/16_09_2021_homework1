@@ -10,6 +10,6 @@ struct Point
 public:
 	double dist(Point a)
 	{
-		return sqrt((x - a.x) * (x - a.x) + (y - a.y) * (y - a.y));
+		return (x - a.x) * (x - a.x) + (y - a.y) * (y - a.y);
 	}
 };
